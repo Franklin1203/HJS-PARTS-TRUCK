@@ -8,6 +8,11 @@ const Category = sequelize.define(
         name:{
             type: DataTypes.STRING(80),
             allowNull: false
+        },
+          descontinuada:{
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     },
     {
