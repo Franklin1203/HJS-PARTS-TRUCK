@@ -49,11 +49,11 @@ const createProduct = async (req, res, next) => {
 
     try {
 
-        const { name, description, precio, stock, categoryId } = req.body
+        const { name, descripcion, precio, stock, categoryId } = req.body
 
         const newProduct = await Product.create({
             name,
-            description,
+            descripcion,
             precio,
             stock,
             categoryId

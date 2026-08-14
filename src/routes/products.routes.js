@@ -14,7 +14,7 @@ const productValidations = [
 
     body('name').notEmpty().withMessage('El nombre es obligatorio').isString(),
     body('descripcion').optional().isString(),
-    body('precio').isDecimal().withMessage('El precio debe ser un numero'),
+    body('precio').isDecimal({min:0.01}).withMessage('El precio debe ser un numero'),
     body('stock').isInt({min:0}).withMessage('El stock no puede ser un numero negativo'),
     body('categoryId').isInt().withMessage('La categoria debe ser un numero entero')
     .custom(async(id)=>{

@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const { default: rateLimit } = require('express-rate-limit');
 const requesTimer = require('./middlewares/requestTimer');
+const { uptime } = require('process');
 
 
 const accessLogStream = fs.createWriteStream(
@@ -45,16 +46,22 @@ app.get('/', (req,res)=>{
 
     res.send('Bienvenid@ a HJS-PARTSTRUCK');
 })
-app.use('/auth',  limiter);
+
+
+app.get('/health', (req,res)=>{
+    res.json({status: 'ok', uptime: process.uptime()})
+})
+
+//app.use('/auth',  limiter);
 app.use('/auth',  authRoutes);
 
-app.use('/product',  limiter);
+//app.use('/product',  limiter);
 app.use('/product', productRoutes);
 
-app.use('/order',  limiter);
+//app.use('/order',  limiter);
 app.use('/order', orderRoutes);
 
-app.use('/category',  limiter);
+//app.use('/category',  limiter);
 app.use('/category', categoryRoutes);
 
 
