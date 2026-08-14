@@ -4,6 +4,9 @@ const { Product, Category } = require('../models');
 const AppError = require('../utils/AppError');
 
 
+
+
+
 const getAllProducts = async (req, res, next) => {
 
     try {
@@ -46,14 +49,13 @@ const createProduct = async (req, res, next) => {
 
     try {
 
-        const { name, description, precio, stock, descontinuado, categoryId } = req.body
+        const { name, description, precio, stock, categoryId } = req.body
 
         const newProduct = await Product.create({
             name,
             description,
             precio,
             stock,
-            descontinuado,
             categoryId
 
         });
@@ -95,18 +97,23 @@ const updateProduct = async (req, res, next) => {
 };
 
 
-const deleteProduct = async( req,res,next) =>{
+const discontinueProduct = async (req, res, next) => {
 
-    try{
+    try {
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return next(new AppError(errors.array()[0].msg, 400));
+        }
 
         const product = await Product.findByPk(req.params.id)
-        if(!product) return next(new AppError('Producto no encontrado',404));
+        if (!product) return next(new AppError('Producto no encontrado', 404));
 
-        await product.destroy();
+        const { descontinuado } = req.body
+        await product.update({descontinuado})
+        res.json(product);
 
-        res.status(204).send();
-
-    }catch(err){
+    } catch (err) {
 
         next(err)
 
@@ -115,7 +122,7 @@ const deleteProduct = async( req,res,next) =>{
 };
 
 
-module.exports = {getAllProducts, getProductById, createProduct, updateProduct, deleteProduct}
+module.exports = { getAllProducts, getProductById, createProduct, updateProduct, discontinueProduct }
 
 
 

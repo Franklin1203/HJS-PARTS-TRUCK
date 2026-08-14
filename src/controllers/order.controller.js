@@ -5,6 +5,49 @@ const AppError = require('../utils/AppError');
 
 
 
+const getAllOrders = async (req, res, next) => {
+
+    try {
+
+        const orders = await Order.findAll({
+
+            include: { model: Product, as: 'products', attributes: ['id', 'name'], through:{attributes: ['cantidad', 'precio', 'descuento']} },
+            order: [['createdAt', 'DESC']]
+        });
+        res.json(orders)
+
+    } catch (err) {
+        next(err)
+    }
+
+}
+
+const getOrderById = async (req, res, next) => {
+
+    try {
+
+        const order = await Order.findByPk(req.params.id,{
+            include: {
+                model: Product,
+                as: 'products',
+                attributes: ['id','name'],
+                through: {
+                    attributes: ['cantidad', 'precio', 'descuento']
+                }
+            }
+        });
+        if (!order) return next(new AppError('Orden no encontrada', 404));
+        res.json(order)
+
+    } catch (err) {
+
+        next(err)
+
+    }
+
+}
+
+
 const createOrder = async (req, res, next) => {
 
     const errors = validationResult(req);
@@ -24,23 +67,23 @@ const createOrder = async (req, res, next) => {
         let calculoTotal = 0
 
         const nuevaOrden = await Order.create(
-            { userId, total: 0  },
-            {transaction}
+            { userId, total: 0 },
+            { transaction }
         );
 
 
-        for(const item of products){
-        
-            const product = await Product.findByPk(item.productId,{transaction});
+        for (const item of products) {
 
-            if(!product){
-                throw new AppError(`El repuesto con ID ${item.productId} no existe`,404);
+            const product = await Product.findByPk(item.productId, { transaction });
+
+            if (!product) {
+                throw new AppError(`El repuesto con ID ${item.productId} no existe`, 404);
 
             }
 
-            if(product.stock < item.cantidad){
-                
-                throw new AppError(`Stock insuficiente para el repuesto: ${product.name}`,400)
+            if (product.stock < item.cantidad) {
+
+                throw new AppError(`Stock insuficiente para el repuesto: ${product.name}`, 400)
             }
 
             const subTotal = product.precio * item.cantidad;
@@ -53,23 +96,23 @@ const createOrder = async (req, res, next) => {
                 cantidad: item.cantidad,
                 precio: product.precio
 
-            },{transaction});
+            }, { transaction });
 
 
             const nuevoStock = product.stock - item.cantidad;
 
             await product.update(
-                {stock: nuevoStock},
-                {transaction}
-            );
-            
-        }
-            await nuevaOrden.update(
-                {total: calculoTotal},
-                {transaction}
+                { stock: nuevoStock },
+                { transaction }
             );
 
-        
+        }
+        await nuevaOrden.update(
+            { total: calculoTotal },
+            { transaction }
+        );
+
+
         await transaction.commit();
 
 
@@ -88,5 +131,5 @@ const createOrder = async (req, res, next) => {
 
 };
 
-module.exports = { createOrder };
+module.exports = { getAllOrders, getOrderById, createOrder };
 
