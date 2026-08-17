@@ -1,4 +1,5 @@
 
+//plantilla para manejar errores
 class AppError extends Error{
 
     constructor(message,statusCode){

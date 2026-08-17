@@ -2,7 +2,7 @@ const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
 
 
-
+//tabla de ordenes
 const Order = sequelize.define(
     'Order',
     {
@@ -14,7 +14,7 @@ const Order = sequelize.define(
         total:{
             type: DataTypes.DECIMAL(18,2),
             allowNull: false,
-            valid: {min: 0.01, isDecimal: true },
+            valid: {min: 0.01, isDecimal: true }, //validamos que el total no sea un numero negativo y que sea un decimal 
 
         }
 

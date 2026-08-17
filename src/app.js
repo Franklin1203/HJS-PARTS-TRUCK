@@ -14,7 +14,7 @@ const { default: rateLimit } = require('express-rate-limit');
 const requesTimer = require('./middlewares/requestTimer');
 const { uptime } = require('process');
 
-
+//para almacenar info de peticiones en archivo
 const accessLogStream = fs.createWriteStream(
 
     path.join(__dirname, '..', 'logs', 'access.log'),{flags:'a'}
@@ -23,6 +23,7 @@ const accessLogStream = fs.createWriteStream(
 
 const app = express();
 
+//para controlar la cantidad de peticiones
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 5,
@@ -31,37 +32,39 @@ const limiter = rateLimit({
 })
 
 
-app.use(helmet());
-app.use(cors());
+app.use(helmet()); //seguridad de los datos
 app.use(cors({
-    origin: ['http://localhost:3001']
+    origin: ['http://localhost:3001'] //para controlar el origen del cliente
 }));
+
+//para registro de info de peticiones
 app.use(morgan('dev'))
 app.use(morgan('combined',{stream: accessLogStream}))
-app.use(requesTimer);
+app.use(requesTimer); 
 app.use(express.json());
 
 
 app.get('/', (req,res)=>{
 
-    res.send('Bienvenid@ a HJS-PARTSTRUCK');
+    res.send('Bienvenid@ a HJS-PARTSTRUCK');  //la pantalla de inicio al iniciar el servidor
 })
 
 
-app.get('/health', (req,res)=>{
+app.get('/health', (req,res)=>{ //para verificar salud del servidor
     res.json({status: 'ok', uptime: process.uptime()})
 })
 
-//app.use('/auth',  limiter);
+//para controlar peticiones con limiter
+app.use('/auth',  limiter);
 app.use('/auth',  authRoutes);
 
-//app.use('/product',  limiter);
+app.use('/product',  limiter);
 app.use('/product', productRoutes);
 
-//app.use('/order',  limiter);
+app.use('/order',  limiter);
 app.use('/order', orderRoutes);
 
-//app.use('/category',  limiter);
+app.use('/category',  limiter);
 app.use('/category', categoryRoutes);
 
 

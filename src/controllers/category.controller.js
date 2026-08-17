@@ -4,7 +4,7 @@ const AppError = require('../utils/AppError');
 const {Category} = require('../models');
 
 
-
+//para obtener todas categorias activas
 const getAllCategories = async (req,res,next) =>{
 
     try{
@@ -14,7 +14,7 @@ const getAllCategories = async (req,res,next) =>{
             where:{
                 descontinuada: false
             },
-            attributes: ['id','name']
+            attributes: ['id','name'] 
 
         })
 
@@ -29,7 +29,7 @@ const getAllCategories = async (req,res,next) =>{
 
 };
 
-
+//para obtener categoria por id
 const getCategoryById = async (req,res, next) =>{
 
         try{
@@ -48,7 +48,7 @@ const getCategoryById = async (req,res, next) =>{
 
 };
 
-
+//para crear categoria
 const createCategory = async (req,res,next) =>{
 
     const errors = validationResult(req);
@@ -75,7 +75,7 @@ const createCategory = async (req,res,next) =>{
 
 }
 
-
+//para actualizar categoria
 const updateCategory = async (req,res,next) =>{
 
     const errors = validationResult(req);

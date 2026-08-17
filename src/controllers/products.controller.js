@@ -6,13 +6,13 @@ const AppError = require('../utils/AppError');
 
 
 
-
+//para obtener todos los productos
 const getAllProducts = async (req, res, next) => {
 
     try {
 
         const products = await Product.findAll({
-            include: { model: Category, as: 'category', attributes: ['id', 'name'] },
+            include: { model: Category, as: 'category', attributes: ['id', 'name'] }, //traemos informacion de la categoria a la que pertenece
             order: [['createdAt', 'DESC']],
         });
         res.json(products);
@@ -23,6 +23,8 @@ const getAllProducts = async (req, res, next) => {
 
 };
 
+
+//para obtener producto por id
 const getProductById = async (req, res, next) => {
 
     try {
@@ -39,7 +41,7 @@ const getProductById = async (req, res, next) => {
 
 };
 
-
+//para crear producto
 const createProduct = async (req, res, next) => {
 
     const errors = validationResult(req);
@@ -71,7 +73,7 @@ const createProduct = async (req, res, next) => {
 
 };
 
-
+//para actualizar producto
 const updateProduct = async (req, res, next) => {
 
     const errors = validationResult(req);
@@ -96,7 +98,7 @@ const updateProduct = async (req, res, next) => {
 
 };
 
-
+//para descontinuar producto
 const discontinueProduct = async (req, res, next) => {
 
     try {

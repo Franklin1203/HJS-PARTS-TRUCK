@@ -2,6 +2,7 @@ const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
 
 
+//tabla de categorias
 const Category = sequelize.define(
     'Category',
     {

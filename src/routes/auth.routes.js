@@ -7,6 +7,7 @@ const controller = require('../controllers/auth.controller');
 const router = Router();
 
 
+//validaciones para el registro
 router.post(
     '/register',
     [
@@ -17,7 +18,7 @@ router.post(
     controller.register
 );
 
-
+//validaciones para el login
 router.post(
     '/login',
     [

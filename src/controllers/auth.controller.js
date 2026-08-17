@@ -4,7 +4,7 @@ const {validationResult} = require('express-validator');
 const {User} = require('../models');
 const AppError = require('../utils/AppError');
 
-
+//para firmar el token
 const sigToken = (user) =>
 
     jwt.sign({sub: user.id, role: user.role}, process.env.JWT_SECRET,{
@@ -12,6 +12,7 @@ const sigToken = (user) =>
     });
 
 
+//para registro de usuario
 const register = async (req, res, next) =>{
 
     const errors = validationResult(req);
@@ -19,16 +20,19 @@ const register = async (req, res, next) =>{
         return next(new AppError(errors.array()[0].msg,400));
     }
 
+
     const {name, email, password} = req.body;
 
 
     try{
 
+        //verificamos si el usuario ya existe o no
         const existing = await User.findOne({where:{email}});
         if(existing){
             return next(new AppError('Ya existe un usuario con ese email',409))
         }
 
+        //hasheamos la clave
         const passwordHash = await bcrypt.hash(password,10);
 
         const user = await User.create({name, email, passwordHash});

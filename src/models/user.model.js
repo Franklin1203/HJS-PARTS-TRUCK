@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-
+//tabla de los usuarios
 const User = sequelize.define(
     'User',
     {
