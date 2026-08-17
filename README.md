@@ -1,4 +1,4 @@
-#HJS-PARTS-TRUCK-API
+# HJS-PARTS-TRUCK-API
 
 <p>
 API RESTful robusta para la gestión de inventario de repuestos y órdenes de compra,  basado en la tienda de repuestos para camiones HJS-PARTS-TRUCK
@@ -102,7 +102,7 @@ GET http://localhost:3001/order/id
 ```
 POST http://localhost:3001/order
 Body → raw → JSON:
-{ products: [{ productId: 1, cantidad: 2,  descuento: 10 }] }
+{ products: [{ "productId": 1, "cantidad": 2,  "descuento": 10 }] }
 Header → Authorization: Bearer <token del usuario (member)>
 ```
 
